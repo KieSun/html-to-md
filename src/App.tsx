@@ -50,7 +50,6 @@ function App() {
   const handleChange = (instance: any) => {
     setText(turndownService.turndown(instance.getValue()));
   };
-  console.log(text);
   return (
     <StyledWrapper>
       <StyledLeft>
