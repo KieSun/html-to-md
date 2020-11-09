@@ -48,14 +48,6 @@ turndownService.addRule('img', {
   }
 });
 
-turndownService.addRule('table', {
-  filter: 'table',
-
-  replacement: function (content, node) {
-    console.log(content, node);
-    return content
-  }
-});
 
 turndownService.remove((node) => {
   return node.className === 'copy-code-btn';
