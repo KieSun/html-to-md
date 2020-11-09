@@ -4,16 +4,16 @@ import 'codemirror/keymap/sublime';
 import 'codemirror/theme/monokai.css';
 import styled from 'styled-components';
 import TurndownService from 'turndown';
+import { tables } from 'turndown-plugin-gfm'
 
 const turndownService = new TurndownService({
   codeBlockStyle: 'fenced',
   headingStyle: 'atx',
   bulletListMarker: '-',
 });
+turndownService.use(tables as any)
 turndownService.addRule('removeCopy', {
-  filter: (node) => {
-    return node.nodeName === 'PRE';
-  },
+  filter: 'pre',
   replacement: (content, node, options) => {
     if (node.children.length === 0) return content;
     return `${options.fence} ${node.children[0].getAttribute('lang')}
@@ -21,6 +21,40 @@ ${content}
 ${options.fence}
     `;
   },
+});
+
+turndownService.addRule('style', {
+  filter: 'style',
+  replacement: (content, node, options) => {
+    return ''
+  },
+});
+
+function cleanAttribute (attribute: any) {
+  return attribute ? attribute.replace(/(\n+\s*)+/g, '\n') : ''
+}
+
+turndownService.addRule('img', {
+  filter: 'img',
+
+  replacement: function (content, node) {
+    const n = node as HTMLElement
+    const alt = cleanAttribute(n.getAttribute('alt'))
+    const src = n.getAttribute('src') || ''
+    const dataSrc = n.getAttribute('data-src')
+    const title = cleanAttribute(n.getAttribute('title'))
+    const titlePart = title ? ' "' + title + '"' : ''
+    return src ? `![](${dataSrc || src + titlePart})` : ''
+  }
+});
+
+turndownService.addRule('table', {
+  filter: 'table',
+
+  replacement: function (content, node) {
+    console.log(content, node);
+    return content
+  }
 });
 
 turndownService.remove((node) => {

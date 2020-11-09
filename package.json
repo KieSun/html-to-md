@@ -17,6 +17,7 @@
     "react-scripts": "3.4.3",
     "styled-components": "^5.2.0",
     "turndown": "^6.0.0",
+    "turndown-plugin-gfm": "^1.0.2",
     "typescript": "~3.7.2"
   },
   "scripts": {
